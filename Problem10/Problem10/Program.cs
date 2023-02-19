@@ -6,40 +6,45 @@ namespace Problem10
 {
 	public class Program
 	{
-		private static readonly List<long> StoredPrimes = new();
-
-		private static void GetAllPrimesSmallerThan(long n)
+		// Sieve of Eratosthenes algorithm
+		private static List<bool> Sieve(int number)
 		{
-			if (n <= 1)
-			{
-				return;
-			}
+			List<bool> isPrime = Enumerable.Repeat(true, number).ToList();
+			isPrime[0] = false;
+			isPrime[1] = false;
 
-			var wentOverN = false;
-			StoredPrimes.Add(2);
-			long i = 3;
-
-			while (!wentOverN)
+			for (int i = 2; i * i <= number; i++)
 			{
-				if (IsPrime(i))
+				if (isPrime[i] == false)
 				{
-					StoredPrimes.Add(i);
+					continue;
 				}
 
-				i += 2;
-				wentOverN = i > n;
+				for (int j = 2 * i; j < number; j += i)
+				{
+					isPrime[j] = false;
+				}
 			}
 
+			return isPrime;
 		}
 
-		public static long GetSumOfAllPrimesSmallerThan(long n)
+		private static long GetSumOfAllPrimesSmallerThan(int number)
 		{
-			GetAllPrimesSmallerThan(n);
+			var sieve = Sieve(number);
+			long sum = 0;
 
-			return StoredPrimes.Sum();
+			for(int i = 2; i < number; i++)
+			{
+				if (!sieve[i])
+				{
+					continue;
+				}
+				sum += i;
+			}
+
+			return sum;
 		}
-
-		private static bool IsPrime(long number) => StoredPrimes.Where(prime => prime <= Math.Sqrt(number)).All(prime => number % prime != 0);
 
 		public static void Main(string[] args)
 		{
