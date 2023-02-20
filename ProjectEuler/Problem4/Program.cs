@@ -48,7 +48,7 @@ namespace Problem4
         {
             var timer = Stopwatch.StartNew();
 
-            var result = LargestPalindromeOfProduct(3);
+            var result = LargestPalindromeOfProduct();
 
             timer.Stop();
 
